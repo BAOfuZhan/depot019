@@ -285,10 +285,11 @@ def strategic_first_attempt(
             captcha2 = get_textclick_with_retry("Second")
 
         # token URL 供所有 3 次提交复用
-        _reservation_day = _beijing_now().date() + datetime.timedelta(days=1 if RESERVE_NEXT_DAY else 0)
+        # 使用当天日期获取页面 token，避免预约日尚未开放导致页面报错拿不到 submit_enc
+        _token_day = _beijing_now().date()
         _token_url = s.url.format(
             roomId=roomid,
-            day=str(_reservation_day),
+            day=str(_token_day),
             seatPageId=seat_page_id or "",
             fidEnc=fid_enc or "",
         )
